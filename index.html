@@ -64,5 +64,28 @@
         <p>A simple UI Kit for everyone to share and enjoy.</p>
       </footer>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js"></script>
+    <script type="text/javascript">
+
+        function CalculateSig(stringToSign, privateKey){
+            var hash = CryptoJS.HmacSHA1(stringToSign, privateKey);
+            var base64 = hash.toString(CryptoJS.enc.Base64);
+            return encodeURIComponent(base64);
+        }
+
+        var d = new Date,
+             expiration = 3600 // 1 hour,
+             unixtime = parseInt(d.getTime() / 1000),
+             future_unixtime = unixtime + expiration,
+             publicKey = "194d675efa",
+             privateKey = "6a26cef3c730805",
+             method = "GET",
+             route = "forms/1/entries";
+
+        stringToSign = publicKey + ":" + method + ":" + route + ":" + future_unixtime;
+        sig = CalculateSig(stringToSign, privateKey);
+        console.log(sig);
+    </script>
   </body>
 </html>
